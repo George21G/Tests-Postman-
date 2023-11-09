@@ -53,6 +53,52 @@
 			"response": []
 		},
 		{
+			"name": "Get tests",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Token",
+						"value": "uWJX7TwS68Ede2OyN43ISjbGU10T1OFF"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWJkZWwuY2FydGFnZW5hOkFiZGVsMTIzNA=="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    // 1 para true\n    // 0 para false \n    // diferente a 0 o 1 toma como 0\n  \"estado\": 1,\n  \"paginate\": false\n}"
+				},
+				"url": {
+					"raw": "http://api2.psicoalianza.com/api/pruebas",
+					"protocol": "http",
+					"host": [
+						"api2",
+						"psicoalianza",
+						"com"
+					],
+					"path": [
+						"api",
+						"pruebas"
+					]
+				},
+				"description": "este se encarga de consultar"
+			},
+			"response": []
+		},
+		{
 			"name": "Add Process",
 			"event": [
 				{
@@ -109,7 +155,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"proceso_nombre\": \"{{proceso_nombre}}\",\n  \"fecha_cierre\": \"2024-01-31\",\n  \"numero_vacantes\": 1,\n  \"proceso_estado\": true,\n  \"verificacion_identidad\": true,\n  \"pruebas\": \n  [\n    {\n      \"id_prueba\": 1,\n      \"id_perfil\": 18,\n      \"valor_porcentual\": 100\n    }\n  ]\n}"
+					"raw": "{\n  \"proceso_nombre\": \"{{proceso_nombre}}\",\n  \"fecha_cierre\": \"2024-01-31\",\n  \"numero_vacantes\": 1,\n  \"proceso_estado\": true,\n  \"verificacion_identidad\": true,\n  \"pruebas\": \n  [\n    {\n      \"id_prueba\": 6,\n      \"id_perfil\": 18,\n      \"valor_porcentual\": 100\n    }\n  ]\n}"
 				},
 				"url": {
 					"raw": "https://api2.psicoalianza.com/api/procesos",
@@ -122,6 +168,82 @@
 					"path": [
 						"api",
 						"procesos"
+					]
+				},
+				"description": "esto se encarga de agregar resultados"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							" var responseJson = pm.response.json();\r",
+							"\r",
+							" console.log(responseJson);\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201, 202]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"estado\", function () {\r",
+							"   \r",
+							"    pm.expect(responseJson.data.estado).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"proceso_nombre\",data.proceso_nombre);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Token",
+						"value": "uWJX7TwS68Ede2OyN43ISjbGU10T1OFF"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWJkZWwuY2FydGFnZW5hOkFiZGVsMTIzNA=="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id_proceso\": 1910,\n  \"id_prueba\": 6,\n  \"id_tipo_documento\": 1,\n  \"documento\": \"10363636360\"\n}"
+				},
+				"url": {
+					"raw": "https://api2.psicoalianza.com/api/resultados",
+					"protocol": "https",
+					"host": [
+						"api2",
+						"psicoalianza",
+						"com"
+					],
+					"path": [
+						"api",
+						"resultados"
 					]
 				},
 				"description": "esto se encarga de agregar resultados"
